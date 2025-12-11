@@ -75,39 +75,30 @@ DXGI::~DXGI()
 
 			dxgiAdapter_ = dxgiAdapter;
 			break;
+		}
 
-			if (!dxgiAdapter_) {
-				assert(false && "アダプタの取得に失敗");
-				return false;
-			}
+		if (!dxgiAdapter_) {
+			assert(false && "アダプタの取得に失敗");
+			return false;
 		}
 	}
 
 	return true;
-
 }
 
-//
-/*
-*/
 [[nodiscard]] IDXGIFactory4* DXGI::factory() const noexcept {
 	if (!dxgiFactory_) {
 		assert(false && "DXGIファクトリーが未作成です");
-
-		return dxgiFactory_;
 	}
+
+	return dxgiFactory_;
 }
 
-//
-/*
-
-
-*/
 [[nodiscard]] IDXGIAdapter1* DXGI::displayAdapter() const noexcept {
 	if (!dxgiFactory_) {
 		assert(false && "ディスプレイアダプターが未作成です");
-
-		return dxgiAdapter_;
 	}
+
+	return dxgiAdapter_;
 }
 

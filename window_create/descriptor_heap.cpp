@@ -12,7 +12,7 @@ Descriptorheap::~Descriptorheap() {
 
 //-------------------------------------------------------------------------
 //ディスクリプタヒープを生成する
-[[nodiscard]] bool Descriptorheap::create(const Dx12& dx12, D3D12_DESCRIPTOR_HEAP_TYPE type, UINT numDescriptors, bool shaderVisible) noexcept {
+[[nodiscard]] bool Descriptorheap::create(const Device& device, D3D12_DESCRIPTOR_HEAP_TYPE type, UINT numDescriptors, bool shaderVisible) noexcept {
 	//ヒープの設定
 	D3D12_DESCRIPTOR_HEAP_DESC heapDesc = {};
 	heapDesc.Type                       = type;
@@ -22,5 +22,27 @@ Descriptorheap::~Descriptorheap() {
 	type_ = type; //ヒープのタイプを保存
 
 	// ディスクリプタヒープの生成
-	//HRESULT hr = dx12.get()->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(&heap_));
+	HRESULT hr = device.get()->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(&heap_));
+	if (FAILED(hr)) {
+		assert(false && "ディスクリプタヒープの生成に失敗しました");
+		return false;
+	}
+	return true;
+}
+
+//ディスクリプタヒープを取得する
+[[nodiscard]] ID3D12DescriptorHeap* Descriptorheap::get() const noexcept {
+	if (!heap_) {
+		assert(false && "ディスクリプタヒープが未生成です");
+	}
+
+	return heap_;
+}
+
+//ディスクリプタヒープのタイプを取得する
+[[nodiscard]] D3D12_DESCRIPTOR_HEAP_TYPE Descriptorheap::getType() const noexcept {
+	if (!heap_) {
+		assert(false && "ディスクリプタヒープが未生成です");
+	}
+	return type_;
 }

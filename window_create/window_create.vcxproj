@@ -104,6 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -127,13 +128,37 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="command_allocator.cpp" />
+    <ClCompile Include="command_list.cpp" />
+    <ClCompile Include="command_queue.cpp" />
     <ClCompile Include="descriptor_heap.cpp" />
-    <ClCompile Include="WinMain.cpp" />
-    <ClCompile Include="Dx12.cpp" />
+    <ClCompile Include="device.cpp" />
+    <ClCompile Include="DXGI.cpp" />
+    <ClCompile Include="entry.cpp" />
+    <ClCompile Include="fence.cpp" />
+    <ClCompile Include="pipline_state_object.cpp" />
+    <ClCompile Include="render_target.cpp" />
+    <ClCompile Include="root_signature.cpp" />
+    <ClCompile Include="shader.cpp" />
+    <ClCompile Include="swap_chain.cpp" />
+    <ClCompile Include="trianglepolygon.cpp" />
+    <ClCompile Include="window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="command_allocator.h" />
+    <ClInclude Include="command_list.h" />
+    <ClInclude Include="command_queue.h" />
     <ClInclude Include="descriptor_heap.h" />
-    <ClInclude Include="Dx12.h" />
+    <ClInclude Include="device.h" />
+    <ClInclude Include="DXGI.h" />
+    <ClInclude Include="fence.h" />
+    <ClInclude Include="pipline_state_object.h" />
+    <ClInclude Include="render_target.h" />
+    <ClInclude Include="root_signature.h" />
+    <ClInclude Include="shader.h" />
+    <ClInclude Include="swap_chain.h" />
+    <ClInclude Include="trianglepolygon.h" />
+    <ClInclude Include="window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

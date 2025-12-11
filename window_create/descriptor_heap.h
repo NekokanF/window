@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Dx12.h"
+#include "device.h"
 
 class Descriptorheap final {
 public:
@@ -14,7 +14,7 @@ public:
 
 	//-------------------------------------------------------------
 	//ディスクリプタヒープを生成する
-	[[nodiscard]] bool create(const Dx12& dx12,D3D12_DESCRIPTOR_HEAP_TYPE type,UINT numDescriptors,bool shaderVisible = false) noexcept;
+	[[nodiscard]] bool create(const Device& device,D3D12_DESCRIPTOR_HEAP_TYPE type,UINT numDescriptors,bool shaderVisible = false) noexcept;
 
 	//-------------------------------------------------------------
 	//ディスクリプタヒープを取得する
