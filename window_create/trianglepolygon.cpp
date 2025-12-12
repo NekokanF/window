@@ -38,21 +38,24 @@ TrianglePolygon::~TrianglePolygon() {
 	return true;
 }
 
+//"nodiscard"はこの関数が例外を投げないことを示すもの
 [[nodiscard]] bool TrianglePolygon::createVertexBuffer(const Device& device) noexcept {
 	//今回利用する三角形の頂点データ
 	vertex triangleVertices[] = {
+		//-こっちが位置-// //-----こっちが色------//
 		{{0.0f,0.5f,0.0f},{1.0f,0.0f,0.0f,1.0f  }}, //上頂点（赤色）
 		{{0.5f,-0.5f,0.0f},{0.0f,1.0f,0.0f,1.0f }}, //右下頂点（緑色）
 		{{-0.5f,-0.5f,0.0f},{0.0f,0.0f,1.0f,1.0f}}  //左下頂点（青色）
 	};
 
 	//頂点データのサイズ
+	//バッファサイズ = バッファ（データを格納するメモリ領域が何バイトの大きさを持っているかを表す値）のこと
 	const auto vertexBufferSize = sizeof(triangleVertices);
 
 	//ヒープの設定を指定
 	//CPU からアクセス可能なメモリを利用するための設定
 	D3D12_HEAP_PROPERTIES heapProperty{};
-	heapProperty.Type                   = D3D12_HEAP_TYPE_UPLOAD;
+	heapProperty.Type                   = D3D12_HEAP_TYPE_UPLOAD; //CPUが書き込めるメモリを確保する
 	heapProperty.CPUPageProperty        = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
 	heapProperty.MemoryPoolPreference   = D3D12_MEMORY_POOL_UNKNOWN;
 	heapProperty.CreationNodeMask       = 1;
