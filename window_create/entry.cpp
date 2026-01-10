@@ -13,6 +13,7 @@
 #include "shader.h"
 #include "pipline_state_object.h"
 #include "trianglepolygon.h"
+#include "quad_polygon.h"
 
 #include <cassert>
 
@@ -93,13 +94,18 @@ public:
             return false;
         }
 
-        //
-
         // 三角形ポリゴンの生成
         if (!trianglePolygonInstance_.create(deviceInstance_)) {
             assert(false && "三角形ポリゴンの作成に失敗しました");
             return false;
         }
+
+        //四角形ポリゴンの生成
+        if (!quadPolygonInstance_.create(deviceInstance_)) {
+            assert(false && "四角形ポリゴンの作成に失敗しました");
+            return false;
+        }
+
         // ルートシグネチャの生成
         if (!rootSignatureInstance_.create(deviceInstance_)) {
             assert(false && "ルートシグネチャの作成に失敗しました");
@@ -175,6 +181,7 @@ public:
 
             // ポリゴンの描画
             trianglePolygonInstance_.draw(commandListInstance_);
+            quadPolygonInstance_.draw(commandListInstance_);
 
             //-------------------------------------------------
 
@@ -235,6 +242,7 @@ private:
     Shader             shaderInstance_{};              /// シェーダーインスタンス
     PiplineStateObject piplineStateObjectInstance_{};  /// パイプラインステートオブジェクトインスタンス
     TrianglePolygon    trianglePolygonInstance_{};     /// 三角形ポリゴンインスタンス
+    Quad_polygon       quadPolygonInstance_{};
 };
 
 //エントリー関数

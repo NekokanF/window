@@ -1,6 +1,5 @@
-//三角ポリゴンクラス
 
-#include "trianglepolygon.h"
+#include "quad_polygon.h"
 #include <cassert>
 #include<DirectXMath.h>
 
@@ -12,7 +11,7 @@ namespace {
 }
 
 //デストラクタ
-TrianglePolygon::~TrianglePolygon() {
+Quad_polygon::~Quad_polygon() {
 	//頂点バッファの解放
 	if (vertexBuffer_) {
 		vertexBuffer_->Release();
@@ -26,7 +25,7 @@ TrianglePolygon::~TrianglePolygon() {
 	}
 }
 
-[[nodiscard]] bool TrianglePolygon::create(const Device& device) noexcept {
+[[nodiscard]] bool Quad_polygon::create(const Device& device) noexcept {
 	//頂点バッファの生成
 	if (!createVertexBuffer(device)) {
 		return false;
@@ -39,41 +38,42 @@ TrianglePolygon::~TrianglePolygon() {
 }
 
 //"nodiscard"はこの関数が例外を投げないことを示すもの
-[[nodiscard]] bool TrianglePolygon::createVertexBuffer(const Device& device) noexcept {
-	//今回利用する三角形の頂点データ
-	vertex triangleVertices[] = {
+[[nodiscard]] bool Quad_polygon::createVertexBuffer(const Device& device) noexcept {
+	//今回利用する四角形の頂点データ
+	vertex quadVertices[] = {
 		//-こっちが位置-// //-----こっちが色------//
-		{{0.0f,0.5f,0.0f},{1.0f,1.0f,1.0f,1.0f  }}, //上頂点（赤色）
-		{{0.3f,-0.5f,0.0f},{1.0f,1.0f,1.0f,1.0f }}, //右下頂点（緑色）
-		{{-0.3f,-0.5f,0.0f},{1.0f,1.0f,1.0f,1.0f}}  //左下頂点（青色）
+		{{-0.5f,0.5f,0.0f},{1.0f,1.0f,1.0f,1.0f}},
+		{{0.5f,0.5f,0.0f}, {1.0f,1.0f,1.0f,1.0f  }}, 
+		{{-0.5f,-0.5f,0.0f},{1.0f,1.0f,1.0f,1.0f }},
+		{{0.5f,-0.5f,0.0f},{1.0f,1.0f,1.0f,1.0f}}
 	};
 
 	//頂点データのサイズ
 	//バッファサイズ = バッファ（データを格納するメモリ領域が何バイトの大きさを持っているかを表す値）のこと
-	const auto vertexBufferSize = sizeof(triangleVertices);
+	const auto vertexBufferSize = sizeof(quadVertices);
 
 	//ヒープの設定を指定
 	//CPU からアクセス可能なメモリを利用するための設定
 	D3D12_HEAP_PROPERTIES heapProperty{};
-	heapProperty.Type                   = D3D12_HEAP_TYPE_UPLOAD; //CPUが書き込めるメモリを確保する
-	heapProperty.CPUPageProperty        = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
-	heapProperty.MemoryPoolPreference   = D3D12_MEMORY_POOL_UNKNOWN;
-	heapProperty.CreationNodeMask       = 1;
-	heapProperty.VisibleNodeMask        = 1;
+	heapProperty.Type                 = D3D12_HEAP_TYPE_UPLOAD; //CPUが書き込めるメモリを確保する
+	heapProperty.CPUPageProperty      = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
+	heapProperty.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
+	heapProperty.CreationNodeMask     = 1;
+	heapProperty.VisibleNodeMask      = 1;
 
 	//どんなリソースを作成するかの設定
 	D3D12_RESOURCE_DESC resourceDesc{};
-	resourceDesc.Dimension            = D3D12_RESOURCE_DIMENSION_BUFFER;
-	resourceDesc.Alignment            = 0;
-	resourceDesc.Width                = vertexBufferSize;
-	resourceDesc.Height               = 1;
-	resourceDesc.DepthOrArraySize     = 1;
-	resourceDesc.MipLevels            = 1;
-	resourceDesc.Format               = DXGI_FORMAT_UNKNOWN;
-	resourceDesc.SampleDesc.Count     = 1;
-	resourceDesc.SampleDesc.Quality   = 0;
-	resourceDesc.Layout               = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-	resourceDesc.Flags                = D3D12_RESOURCE_FLAG_NONE;
+	resourceDesc.Dimension               = D3D12_RESOURCE_DIMENSION_BUFFER;
+	resourceDesc.Alignment               = 0;
+	resourceDesc.Width                   = vertexBufferSize;
+	resourceDesc.Height                  = 1;
+	resourceDesc.DepthOrArraySize        = 1;
+	resourceDesc.MipLevels               = 1;
+	resourceDesc.Format                  = DXGI_FORMAT_UNKNOWN;
+	resourceDesc.SampleDesc.Count        = 1;
+	resourceDesc.SampleDesc.Quality      = 0;
+	resourceDesc.Layout                  = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+	resourceDesc.Flags                   = D3D12_RESOURCE_FLAG_NONE;
 
 	//頂点バッファの生成
 	auto res = device.get()->CreateCommittedResource(
@@ -101,7 +101,7 @@ TrianglePolygon::~TrianglePolygon() {
 	}
 
 	//頂点データをコピー
-	memcpy_s(data, vertexBufferSize, triangleVertices, vertexBufferSize);
+	memcpy_s(data, vertexBufferSize, quadVertices, vertexBufferSize);
 
 	//コピーが終わったのでマップ解除（CPUからアクセス負荷にする）
 	//ここまで来たら GPU が利用するメモリ領域（VRAM）にコピー済みなので、triangleVertices は不要になる
@@ -109,42 +109,42 @@ TrianglePolygon::~TrianglePolygon() {
 
 	//頂点バッファビューの設定
 	vertexBufferView_.BufferLocation = vertexBuffer_->GetGPUVirtualAddress();
-	vertexBufferView_.SizeInBytes    = vertexBufferSize;
-	vertexBufferView_.StrideInBytes  = sizeof(vertex);
+	vertexBufferView_.SizeInBytes = vertexBufferSize;
+	vertexBufferView_.StrideInBytes = sizeof(vertex);
 
 	return true;
 }
 
 //インデックスバッファの生成
-[[nodiscard]] bool TrianglePolygon::createIndexBuffer(const Device& device)	noexcept {
-	uint16_t triangleIndices[] = {
-		0,1,2 //三角形を構成する頂点のインデックス
+[[nodiscard]] bool Quad_polygon::createIndexBuffer(const Device& device)	noexcept {
+	uint16_t quadIndices[] = {
+		0,1,2,3//四角形を構成する頂点のインデックス
 	};
 
 	//インデックスデータのサイズ
-	const auto indexBufferSize = sizeof(triangleIndices);
+	const auto indexBufferSize = sizeof(quadIndices);
 
 	//ヒープの設定を指定
 	D3D12_HEAP_PROPERTIES heapProperty{};
-	heapProperty.Type                 = D3D12_HEAP_TYPE_UPLOAD;
-	heapProperty.CPUPageProperty      = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
+	heapProperty.Type = D3D12_HEAP_TYPE_UPLOAD;
+	heapProperty.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
 	heapProperty.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
-	heapProperty.CreationNodeMask     = 1;
-	heapProperty.VisibleNodeMask      = 1;
+	heapProperty.CreationNodeMask = 1;
+	heapProperty.VisibleNodeMask = 1;
 
 	//リソースの設定を行う
 	D3D12_RESOURCE_DESC resourceDesc{};
-	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	resourceDesc.Alignment = 00;
-	resourceDesc.Width = indexBufferSize;
-	resourceDesc.Height = 1;
-	resourceDesc.DepthOrArraySize = 1;
-	resourceDesc.MipLevels = 1;
-	resourceDesc.Format = DXGI_FORMAT_UNKNOWN;
-	resourceDesc.SampleDesc.Count = 1;
-	resourceDesc.SampleDesc.Quality = 0;
-	resourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-	resourceDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
+	resourceDesc.Dimension           = D3D12_RESOURCE_DIMENSION_BUFFER;
+	resourceDesc.Alignment           = 0;
+	resourceDesc.Width               = indexBufferSize;
+	resourceDesc.Height              = 1;
+	resourceDesc.DepthOrArraySize    = 1;
+	resourceDesc.MipLevels           = 1;
+	resourceDesc.Format              = DXGI_FORMAT_UNKNOWN;
+	resourceDesc.SampleDesc.Count    = 1;
+	resourceDesc.SampleDesc.Quality  = 0;
+	resourceDesc.Layout              = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+	resourceDesc.Flags               = D3D12_RESOURCE_FLAG_NONE;
 
 	//インデックスバッファの生成
 	auto res = device.get()->CreateCommittedResource(
@@ -167,7 +167,7 @@ TrianglePolygon::~TrianglePolygon() {
 		return false;
 	}
 
-	memcpy_s(data, indexBufferSize, triangleIndices, indexBufferSize);
+	memcpy_s(data, indexBufferSize, quadIndices, indexBufferSize);
 	//ここまで来たら GPU が利用するメモリ領域（VRAM）にコピー済みなので、triangleIndices は不要になる
 	indexBuffer_->Unmap(0, nullptr);
 
@@ -180,9 +180,9 @@ TrianglePolygon::~TrianglePolygon() {
 
 }
 
-[[nodiscard]] void TrianglePolygon::draw(const CommandList& commandList)noexcept {
+[[nodiscard]] void Quad_polygon::draw(const CommandList& commandList)noexcept {
 	//頂点バッファの設定
-	commandList.get()->IASetVertexBuffers(0, 1, &vertexBufferView_);
+	commandList.get()->IASetVertexBuffers(0, 1,&vertexBufferView_);
 	//インデックスバッファの設定
 	commandList.get()->IASetIndexBuffer(&indexBufferView_);
 	//プリミティブ形状の設定（三角形）
