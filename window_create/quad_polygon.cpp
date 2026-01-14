@@ -42,10 +42,10 @@ Quad_polygon::~Quad_polygon() {
 	//今回利用する四角形の頂点データ
 	vertex quadVertices[] = {
 		//-こっちが位置-// //-----こっちが色------//
-		{{-0.5f,0.5f,0.0f},{1.0f,1.0f,1.0f,1.0f}},
-		{{0.5f,0.5f,0.0f}, {1.0f,1.0f,1.0f,1.0f  }}, 
-		{{-0.5f,-0.5f,0.0f},{1.0f,1.0f,1.0f,1.0f }},
-		{{0.5f,-0.5f,0.0f},{1.0f,1.0f,1.0f,1.0f}}
+		{{-0.2f,0.3f,0.0f},{0.0f,1.0f,1.0f,1.0f}},
+		{{0.2f,0.3f,0.0f}, {0.0f,1.0f,1.0f,1.0f  }}, 
+		{{-0.2f,-0.4f,0.0f},{0.0f,1.0f,1.0f,1.0f }},
+		{{0.2f,-0.4f,0.0f},{0.5f,1.0f,1.0f,1.0f}}
 	};
 
 	//頂点データのサイズ
@@ -186,9 +186,9 @@ Quad_polygon::~Quad_polygon() {
 	//インデックスバッファの設定
 	commandList.get()->IASetIndexBuffer(&indexBufferView_);
 	//プリミティブ形状の設定（三角形）
-	commandList.get()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	commandList.get()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 	//描画コマンド
-	commandList.get()->DrawIndexedInstanced(3, 1, 0, 0, 0);
+	commandList.get()->DrawIndexedInstanced(4, 1, 0, 0, 0);
 }
 
 
