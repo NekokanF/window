@@ -63,6 +63,12 @@
     <ClCompile Include="quad_polygon.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="constant_buffer.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="descriptor_heap.h">
@@ -108,6 +114,12 @@
       <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="quad_polygon.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="constant_buffer.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>
