@@ -37,6 +37,6 @@ Device::~Device() {
 		assert(false && "デバイスが未作成です");
 	}
 
-	return device_;
+	return device_.Get();
 }
  

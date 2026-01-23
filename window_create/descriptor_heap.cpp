@@ -1,9 +1,5 @@
-//ディスクリプターヒープ制御クラス
-
 #include "descriptor_heap.h"
-#include "device.h"
 #include <cassert>
-#include <wrl/client.h>
 
 //-------------------------------------------------------------------------
 //デストラクタ
@@ -31,18 +27,8 @@ Descriptorheap::~Descriptorheap() {
 		assert(false && "ディスクリプタヒープの生成に失敗しました");
 		return false;
 	}
-
-	//全ディスクリプタをフリーリストに登録
-	maxDescriptorCount_ = numDescriptors;
-	for (UINT i = 0; i < maxDescriptorCount_; ++i) {
-		freeIndices_.push_back(i);
-	}
-
 	return true;
 }
-
-
-
 
 //ディスクリプタヒープを取得する
 [[nodiscard]] ID3D12DescriptorHeap* Descriptorheap::get() const noexcept {
@@ -50,7 +36,7 @@ Descriptorheap::~Descriptorheap() {
 		assert(false && "ディスクリプタヒープが未生成です");
 	}
 
-	return heap_.Get();
+	return heap_;
 }
 
 //ディスクリプタヒープのタイプを取得する
@@ -59,47 +45,4 @@ Descriptorheap::~Descriptorheap() {
 		assert(false && "ディスクリプタヒープが未生成です");
 	}
 	return type_;
-}
-
-//ディスクリプタを確保する
-[[nodiscord]] optional<UINT> allocateDescriptor() noexcept {
-	if (freeIndices_.empty()) {
-		return nullopt;
-	}
-	const auto index = freeIndices_.back();
-	freeIndices_.pop_back();
-	return index;
-}
-
-//解放予定のディスクリプタを登録する
-void releaseDescriptor(UINT descriptionIndex) noexcept {
-	//10フレーム語に解放するよう登録
-	pendingFreeIndices_.push_back(descriptionIndex);
-}
-
-//コンストラクタ
-DescriptorHeapContainer::DescriptorHeapContainer() = default;
-
-//デストラクタ
-DescriptorHeapContainer::~DescriptorHeapContainer() {
-	map_.clear();
-}
-
-[[nodiscard]] bool DescriptorHeapContainer::create(D3D12_DESCRIPTOR_HEAP_TYPE type, UINT numDescriptors, bool shaderVisible) noexcept {
-	if (map_.find(type) != map_.end()) {
-		return false;
-	}
-
-	auto p = make_unique<Descriptorheap>();
-	if (p->create(type,numDescriptors,shaderVisible)) {
-		map_.emplace(type, move(p));
-	}
-
-	return true;
-}
-
-void DescriptorHeapContainer::applyPendingFree() noexcept {
-	for (auto& [key, p] : map_) {
-		p->applyPendingFree();
-	}
 }

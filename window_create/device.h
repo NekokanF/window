@@ -14,6 +14,11 @@ public:
 	//デストラクタ
 	~Device();
 
+	static Device& instance() noexcept {
+		static Device instance;
+		return instance;
+	}
+
 	//-----------------------------------------------------
 	//デバイスを作成する
 	[[nodiscard]] bool create(const DXGI& dxgi) noexcept;
@@ -22,7 +27,10 @@ public:
 	//デバイスを取得する
 	[[nodiscard]] ID3D12Device* get() const noexcept;
 
-private:
-	ID3D12Device* device_; //デバイス
-};
+	//DXGI インスタンスを取得する
+	[[nodiscard]] const DXGI& dxgi() const noexcept;
 
+private:
+	DXGI          dxgiInstance_{}; //DXGIインスタンス
+	ID3D12Device* device_;         //デバイス
+};
