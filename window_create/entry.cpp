@@ -7,6 +7,7 @@
 #include "command_queue.h"
 #include "swap_chain.h"
 #include "descriptor_heap.h"
+#include "depth_buffer.h"
 #include "render_target.h"
 #include "fence.h"
 #include "root_signature.h"
@@ -58,7 +59,11 @@ public:
             return false;
         }
 
-        //
+        //デプスバッファの作成
+        /*if (!depthBufferInstance_.create()) {
+            assert(false && "デプスバッファの作成に失敗");
+            return false;
+        }*/
 
         // ディスクリプタヒープの生成
         if (!descriptorHeapInstance_.create(deviceInstance_, D3D12_DESCRIPTOR_HEAP_TYPE_RTV, swapChainInstance_.getDesc().BufferCount)) {
@@ -227,6 +232,7 @@ private:
     Device           deviceInstance_{};               /// デバイスインスタンス
     CommandQueue     commandQueueInstance_{};         /// コマンドキューインスタンス
     SwapChain        swapChainInstance_{};            /// スワップチェインインスタンス
+    DepthBuffer      depthBufferInstance_{};
     Descriptorheap   descriptorHeapInstance_{};       /// ディスクリプタヒープインスタンス
     RenderTarget     renderTargetInstance_{};         /// レンダーターゲットインスタンス
     CommandAllocator commandAllocatorInstance_[2]{};  /// コマンドアロケータインスタンス

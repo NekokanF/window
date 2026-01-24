@@ -2,6 +2,7 @@
 
 #include "DXGI.h"
 #include <d3d12.h>
+#include <wrl/client.h>
 
 class Device final{
 public:
@@ -32,5 +33,5 @@ public:
 
 private:
 	DXGI          dxgiInstance_{}; //DXGIインスタンス
-	ID3D12Device* device_;         //デバイス
+	ID3D12Device* device_{};         //デバイス
 };

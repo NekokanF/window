@@ -6,6 +6,11 @@
 class Window final{
 public:
 
+	static Window& instance() noexcept {
+		static Window instance;
+		return instance;
+	}
+
 	//-----------------------------------------------------------
 	//コンストラクタ
 	Window() = default;
