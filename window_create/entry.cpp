@@ -155,7 +155,7 @@ public:
             commandListInstance_.get()->OMSetRenderTargets(1, handles, false, nullptr);
 
             // レンダーターゲットのクリア
-            const float clearColor[] = { 0.2f, 0.2f, 0.2f, 1.0f };  // クリア
+            const float clearColor[] = { 0.1f, 0.1f, 0.1f, 1.0f };  // クリア
             commandListInstance_.get()->ClearRenderTargetView(handles[0], clearColor, 0, nullptr);
 
             //-------------------------------------------------

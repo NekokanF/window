@@ -54,6 +54,8 @@ DepthBuffer::~DepthBuffer() {
 
 	//ビューの作成
 
+	//ヒープ取得
+
 	//デプスビューの設定
 	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
 	dsvDesc.Format = depthDesc.Format;

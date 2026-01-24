@@ -11,6 +11,7 @@ namespace {
 }
 
 //デストラクタ
+
 Quad_polygon::~Quad_polygon() {
 	//頂点バッファの解放
 	if (vertexBuffer_) {
@@ -42,10 +43,10 @@ Quad_polygon::~Quad_polygon() {
 	//今回利用する四角形の頂点データ
 	vertex quadVertices[] = {
 		//-こっちが位置-// //-----こっちが色------//
-		{{-0.2f,0.3f,0.0f},{0.0f,1.0f,1.0f,1.0f}},
-		{{0.2f,0.3f,0.0f}, {0.0f,1.0f,1.0f,1.0f  }}, 
-		{{-0.2f,-0.4f,0.0f},{0.0f,1.0f,1.0f,1.0f }},
-		{{0.2f,-0.4f,0.0f},{0.5f,1.0f,1.0f,1.0f}}
+		{{-0.2f,0.3f,0.0f},{0.0f,1.0f,0.0f,1.0f}},
+		{{0.2f,0.3f,0.0f}, {0.0f,1.0f,0.0f,1.0f  }}, 
+		{{-0.2f,-0.4f,0.0f},{0.0f,1.0f,0.0f,1.0f }},
+		{{0.2f,-0.4f,0.0f},{0.0f,1.0f,0.0f,1.0f}}
 	};
 
 	//頂点データのサイズ
@@ -185,7 +186,7 @@ Quad_polygon::~Quad_polygon() {
 	commandList.get()->IASetVertexBuffers(0, 1,&vertexBufferView_);
 	//インデックスバッファの設定
 	commandList.get()->IASetIndexBuffer(&indexBufferView_);
-	//プリミティブ形状の設定（三角形）
+	//プリミティブ形状の設定
 	commandList.get()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 	//描画コマンド
 	commandList.get()->DrawIndexedInstanced(4, 1, 0, 0, 0);
